@@ -1,0 +1,25 @@
+import numpy as np
+
+def accuracy(predicted_class, ground_truth, N, *args, **kwargs):
+    """
+        Вычисление точности:
+            accuracy = sum( predicted_class == ground_truth ) / N, где N - размер набора данных
+        TODO: реализуйте подсчет accuracy
+    """
+    # raise NotImplementedError
+    acc = np.sum(predicted_class == ground_truth) / N
+    return acc
+
+
+def balanced_accuracy(TP_i, N_i, N, *args, **kwargs):
+    """
+        Вычисление точности:
+            balanced accuracy = sum( TP_i / N_i ) / N, где
+                TP_i - кол-во изображений класса i, для которых предсказан класс i
+                N_i - количество изображений набора данных класса i
+                N - количество классов в наборе данных
+        TODO: реализуйте подсчет balanced accuracy
+    """
+    # raise NotImplementedError
+    balanced_acc = np.sum(TP_i / N_i) / N
+    return balanced_acc
