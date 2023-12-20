@@ -45,11 +45,12 @@ class Trainer:
             "number epoch": self.cfg.num_epochs,
             "model name": self.cfg.model_name
         }
+        """
         for i in range(len(self.cfg.model_cfg.layers)):
             _params[self.cfg.model_cfg.layers[i][0] + f' {i + 1}'] = self.cfg.model_cfg.layers[i][1]
             if self.cfg.model_cfg.layers[i][1] == {}:
                 _params[f'activation function {i + 1}'] = self.cfg.model_cfg.layers[i][0]
-
+        """
         self.logger.log_hyperparameters(params=_params)
 
     def __prepare_data(self, dataset_cfg):
