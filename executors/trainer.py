@@ -13,15 +13,15 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 
-from datasets.oxford_pet_dataset import OxfordIIITPet
+from pythonProject7.datasets.oxford_pet_dataset import OxfordIIITPet
 
-from datasets.utils.prepare_transforms import prepare_transforms
-from logs.Logger import Logger
-from models.vgg16 import VGG16
-from models.resnet50 import ResNet50
-from utils.metrics import accuracy, balanced_accuracy
-from utils.visualization import show_batch
-from utils.utils import set_seed
+from pythonProject7.datasets.utils.prepare_transforms import prepare_transforms
+from pythonProject7.logs.Logger import Logger
+from pythonProject7.models.vgg16 import VGG16
+from pythonProject7.models.resnet50 import ResNet50
+from pythonProject7.utils.metrics import accuracy, balanced_accuracy
+from pythonProject7.utils.visualization import show_batch
+from pythonProject7.utils.utils import set_seed
 
 
 class Trainer:
