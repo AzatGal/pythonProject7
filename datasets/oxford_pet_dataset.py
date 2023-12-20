@@ -31,17 +31,20 @@ class OxfordIIITPet(Dataset):
                   'r') as f:
             lines = f.read()
         for line in lines.split('\n'):
-            filename, label, category, _ = line.split(' ')
+            try:
+                filename, label, category, _ = line.split(' ')
 
-            filename = f'{filename}.jpg'
-            label = int(label) - 1
-            category = int(category) - 1
+                filename = f'{filename}.jpg'
+                label = int(label) - 1
+                category = int(category) - 1
 
-            # TODO: реализуйте сохранение filename, label, category в соответствующие атрибуты класса
-            # raise NotImplementedError
-            self.paths.append(filename)
-            self.labels.append(label)
-            self.categories.append(category)
+                # TODO: реализуйте сохранение filename, label, category в соответствующие атрибуты класса
+                # raise NotImplementedError
+                self.paths.append(filename)
+                self.labels.append(label)
+                self.categories.append(category)
+            except:
+                continue
 
     def __len__(self):
         """
