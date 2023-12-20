@@ -19,7 +19,7 @@ class VGG16(nn.Module):
 
         # TODO: инициализируйте полносвязные слои модели, используя функцию classifier_block
         #  (последний слой инициализируется отдельно)
-        self.linears = classifier_block([4096, 4096], [4096, 4096])
+        self.linears = classifier_block([128, 128], [128, 128])  #  [4096, 4096], [4096, 4096])
 
         # TODO: инициализируйте последний полносвязный слой для классификации с помощью
         #  nn.Linear(in_features=4096, out_features=nrof_classes)
