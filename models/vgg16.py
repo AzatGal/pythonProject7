@@ -39,7 +39,7 @@ class VGG16(nn.Module):
         x = self.conv1(inputs)
         x = self.conv2(x)
         print(x.size())
-        x = x.view(x.size(0), -1)
+        # x = x.view(x.size(0), -1)
         print(x.size())
         x = self.linears(x)
         print(x.size())
