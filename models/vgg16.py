@@ -59,10 +59,8 @@ class VGG16(nn.Module):
         print(output)
         """
         print("inputs size:", inputs.size())
-        outputs = []
-        for input in inputs:
-            x = self.conv_layers(input)
-            x = x.view(x.size(0), -1)
-            x = self.linears(x)
-            outputs.append(self.classifier(x))
-        return torch.tensor(outputs)
+        x = self.conv_layers(inputs)
+        x = x.view(x.size(0), -1)
+        x = self.linears(x)
+        outputs = self.classifier(x)
+        return outputs
