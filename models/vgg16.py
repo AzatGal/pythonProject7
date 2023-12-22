@@ -14,18 +14,26 @@ class VGG16(nn.Module):
 
         # TODO: инициализируйте сверточные слои модели, используя функцию conv_block
 
-        self.layers = []
+        _conv_layers = []
+        for t in self.cfg.conv_blocks:
+            _conv_layers.append(conv_block(t[0], t[0]))
 
-        for i in self.cfg.conv_blocks:
-            self.layers.append(conv_block(i, i))
+        self.conv_layers = nn.Sequential(*_conv_layers)
+        """
+        self.conv1 = conv_block(self.cfg.conv_blocks[0], self.cfg.conv_blocks[0])
+        self.conv2 = conv_block(self.cfg.conv_blocks[1], self.cfg.conv_blocks[1])
+        self.conv3 = conv_block(self.cfg.conv_blocks[2], self.cfg.conv_blocks[2])
+        self.conv4 = conv_block(self.cfg.conv_blocks[3], self.cfg.conv_blocks[3])
+        self.conv5 = conv_block(self.cfg.conv_blocks[4], self.cfg.conv_blocks[4])
+        """
 
         # TODO: инициализируйте полносвязные слои модели, используя функцию classifier_block
         #  (последний слой инициализируется отдельно)
-        self.layers.append(classifier_block(self.cfg.full_conn_blocks, self.cfg.full_conn_blocks))
+        self.linears = classifier_block(self.cfg.full_conn_blocks, self.cfg.full_conn_blocks)
 
         # TODO: инициализируйте последний полносвязный слой для классификации с помощью
         #  nn.Linear(in_features=4096, out_features=nrof_classes)
-        self.layers.append(nn.Linear(in_features=4096, out_features=nrof_classes))
+        self.classifier = nn.Linear(in_features=4096, out_features=nrof_classes)
 
         # raise NotImplementedError
 
@@ -50,7 +58,8 @@ class VGG16(nn.Module):
         output = self.classifier(x)
         print(output)
         """
-        outputs = inputs
-        for layer in self.layers:
-            outputs = layer(outputs)
+        x = self.conv_layers(inputs)
+        x.view(x.size(0), -1)
+        x = self.linears(x)
+        outputs = self.classifier(x)
         return outputs
