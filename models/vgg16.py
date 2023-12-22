@@ -67,8 +67,8 @@ class VGG16(nn.Module):
         print("inputs size:", inputs.size())
         x = self.conv_layers(inputs)
         # x = x.view(x.size(0), -1)
-        # x = nn.AdaptiveAvgPool2d((4, 2))(x)
-        # x = torch.flatten(x)
+        x = nn.AdaptiveAvgPool2d((7, 7))(x)
+        x = torch.flatten(x, 1)
         x = self.linears(x)
         outputs = self.classifier(x)
         return outputs
