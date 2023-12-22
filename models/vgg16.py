@@ -16,7 +16,7 @@ class VGG16(nn.Module):
 
         _conv_layers = []
         for t in self.cfg.conv_blocks:
-            _conv_layers.append(conv_block(t[0], t[0]))
+            _conv_layers.append(conv_block(t, t))
 
         self.conv_layers = nn.Sequential(*_conv_layers)
         """
