@@ -59,6 +59,10 @@ def classifier_block(in_features: [], out_features: [], linear_params=None):
 
     # raise NotImplementedError
     layers = []
+    print("--------------------------------------------------------")
+    print(in_features)
+    print(out_features)
+    print("--------------------------------------------------------")
     for i in range(len(in_features)):
         layers.append(nn.Linear(in_features[i], out_features[i], **linear_params))
         layers.append(nn.ReLU(inplace=True))
