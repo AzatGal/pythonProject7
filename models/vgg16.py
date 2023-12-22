@@ -15,8 +15,17 @@ class VGG16(nn.Module):
         # TODO: инициализируйте сверточные слои модели, используя функцию conv_block
 
         _conv_layers = []
-        for t in self.cfg.conv_blocks:
-            _conv_layers.append(conv_block(t, t))
+        for i in range(len(self.cfg.conv_blocks)):
+            if i == 0:
+                _conv_layers.append(
+                    conv_block([3, self.cfg.conv_blocks[i][0]],
+                               self.cfg.conv_blocks[i])
+                )
+                continue
+            _conv_layers.append(
+                conv_block([self.cfg.conv_blocks[i - 1][0], self.cfg.conv_blocks[i][1]],
+                           self.cfg.conv_blocks[i])
+            )
 
         self.conv_layers = nn.Sequential(*_conv_layers)
         """

@@ -26,9 +26,9 @@ def conv_block(in_channels: [], out_channels: [], conv_params=None, maxpool_para
 
     # raise NotImplementedError
     layers = []
-    for i in in_channels:
-        layers.append(nn.Conv2d(i, i, **conv_params))
-        layers.append(nn.BatchNorm2d(i))
+    for i in range(len(in_channels)):
+        layers.append(nn.Conv2d(in_channels[i], out_channels[i], **conv_params))
+        layers.append(nn.BatchNorm2d(out_channels[i]))
         layers.append(nn.ReLU(inplace=True))
 
     layers.append(nn.MaxPool2d(**maxpool_params))
@@ -58,8 +58,8 @@ def classifier_block(in_features: [], out_features: [], linear_params=None):
 
     # raise NotImplementedError
     layers = []
-    for i in in_features:
-        layers.append(nn.Linear(i, i, **linear_params))
+    for i in range(len(in_features)):
+        layers.append(nn.Linear(in_features[i], out_features[i], **linear_params))
         layers.append(nn.ReLU(inplace=True))
         layers.append(nn.Dropout(p=0.5, inplace=False))
 
