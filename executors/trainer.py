@@ -81,7 +81,7 @@ class Trainer:
     def make_step(self, batch, update_model=True):
         images = batch['image'].to(self.cfg.device)
         labels = batch['label'].to(self.cfg.device)
-
+        print("images size:", images.size())
         # Forward pass
         outputs = self.model(images)
         loss = self.criterion(outputs, labels)
