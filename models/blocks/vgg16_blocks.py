@@ -16,13 +16,11 @@ def conv_block(in_channels: [], out_channels: [], conv_params=None, maxpool_para
 
         # TODO: реализуйте данную функцию
     """
-    print(in_channels)
-    print()
-    print(out_channels)
+
     assert len(in_channels) == len(out_channels)
 
     if conv_params is None:
-        conv_params = dict(kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+        conv_params = dict(kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), dilation=1)
     if maxpool_params is None:
         maxpool_params = dict(kernel_size=2, stride=2, padding=0)
 
