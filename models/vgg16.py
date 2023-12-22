@@ -58,6 +58,7 @@ class VGG16(nn.Module):
         output = self.classifier(x)
         print(output)
         """
+        print("inputs size:", inputs.size())
         x = self.conv_layers(inputs)
         x = x.view(x.size(0), -1)
         x = self.linears(x)
