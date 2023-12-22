@@ -59,7 +59,7 @@ class VGG16(nn.Module):
         print(output)
         """
         x = self.conv_layers(inputs)
-        x.view(x.size(0), -1)
+        x = x.view(x.size(0), -1)
         x = self.linears(x)
         outputs = self.classifier(x)
         return outputs
