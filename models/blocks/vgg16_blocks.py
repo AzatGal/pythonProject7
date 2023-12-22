@@ -16,7 +16,9 @@ def conv_block(in_channels: [], out_channels: [], conv_params=None, maxpool_para
 
         # TODO: реализуйте данную функцию
     """
-
+    print(in_channels)
+    print()
+    print(out_channels)
     assert len(in_channels) == len(out_channels)
 
     if conv_params is None:
