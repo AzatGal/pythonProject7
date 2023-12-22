@@ -15,16 +15,12 @@ class VGG16(nn.Module):
         # TODO: инициализируйте сверточные слои модели, используя функцию conv_block
 
         _conv_layers = []
-        for i in range(len(self.cfg.conv_blocks)):
-            if i == 0:
-                _conv_layers.append(
-                    conv_block([3, self.cfg.conv_blocks[i][0]],
-                               self.cfg.conv_blocks[i])
-                )
-                continue
+
+        size = len(self.cfg.conv_blocks)
+        for i in range(size):
             _conv_layers.append(
-                conv_block([self.cfg.conv_blocks[i - 1][0], self.cfg.conv_blocks[i][1]],
-                           self.cfg.conv_blocks[i])
+                conv_block(self.cfg.conv_blocks['in_channels'][i],
+                           self.cfg.conv_blocks['out_channels'][i])
             )
 
         self.conv_layers = nn.Sequential(*_conv_layers)
@@ -38,7 +34,8 @@ class VGG16(nn.Module):
 
         # TODO: инициализируйте полносвязные слои модели, используя функцию classifier_block
         #  (последний слой инициализируется отдельно)
-        self.linears = classifier_block(self.cfg.full_conn_blocks, self.cfg.full_conn_blocks)
+        self.linears = classifier_block(self.cfg.full_conn_blocks["in_features"],
+                                        self.cfg.full_conn_blocks["out_features"])
 
         # TODO: инициализируйте последний полносвязный слой для классификации с помощью
         #  nn.Linear(in_features=4096, out_features=nrof_classes)

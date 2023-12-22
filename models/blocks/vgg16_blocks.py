@@ -26,6 +26,7 @@ def conv_block(in_channels: [], out_channels: [], conv_params=None, maxpool_para
 
     # raise NotImplementedError
     layers = []
+
     for i in range(len(in_channels)):
         layers.append(nn.Conv2d(in_channels[i], out_channels[i], **conv_params))
         layers.append(nn.BatchNorm2d(out_channels[i]))
