@@ -98,6 +98,7 @@ class Trainer:
         self.model.train()
         for batch_idx, batch in enumerate(self.train_dataloader):
             loss, outputs = self.make_step(batch, update_model=True)
+            outputs = torch.argmax(outputs, dim=1)
             acc = accuracy(outputs, batch["label"])
             # Log loss and accuracy
             self.logger.save_param('train', 'loss', loss)  # ('Train Loss', loss, step=batch_idx)
