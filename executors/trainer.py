@@ -101,7 +101,7 @@ class Trainer:
             batch['image'].to(self.cfg.device)
             batch['label'].to(self.cfg.device)
             """
-            labels = batch["label"].copy()
+            labels = batch["label"].clone()
             loss, outputs = self.make_step(batch, update_model=True)
 
             outputs = torch.argmax(outputs, dim=1)
