@@ -62,13 +62,9 @@ class VGG16(nn.Module):
         x = self.conv3(x)
         x = self.conv4(x)
         x = self.conv5(x)
-        print(x.size())
         x = x.view(x.size(0), -1)
-        print(x.size())
         x = self.linears(x)
-        print(x.size())
         outputs = self.classifier(x)
-        print(outputs.size())
         """
         print("inputs size:", inputs.size())
         x = self.conv_layers(inputs)
