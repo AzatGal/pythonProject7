@@ -97,7 +97,11 @@ class Trainer:
     def train_epoch(self, *args, **kwargs):
         self.model.train()
         for batch_idx, batch in enumerate(self.train_dataloader):
+            batch['image'].to(self.cfg.device)
+            batch['label'].to(self.cfg.device)
+
             loss, outputs = self.make_step(batch, update_model=True)
+
             outputs = torch.argmax(outputs, dim=1)
             acc = accuracy(outputs, batch["label"])
             # Log loss and accuracy
