@@ -1,13 +1,14 @@
 import numpy as np
+import torch
 
-def accuracy(predicted_class, ground_truth, N, *args, **kwargs):
+def accuracy(predicted_class, ground_truth, *args, **kwargs):
     """
         Вычисление точности:
             accuracy = sum( predicted_class == ground_truth ) / N, где N - размер набора данных
         TODO: реализуйте подсчет accuracy
     """
     # raise NotImplementedError
-    acc = np.sum(predicted_class == ground_truth) / N
+    acc = torch.sum(predicted_class == ground_truth) / predicted_class.size(0)
     return acc
 
 
