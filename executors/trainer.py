@@ -63,7 +63,11 @@ class Trainer:
         self.test_dataloader = DataLoader(self.test_dataset, batch_size=self.cfg.batch_size, shuffle=False)
 
     def __prepare_model(self, model_cfg):
-        self.model = VGG16(model_cfg, self.cfg.dataset_cfg.nrof_classes)
+        if self.cfg.model_name == "VGG16":
+            self.model = VGG16(model_cfg, self.cfg.dataset_cfg.nrof_classes)
+        if self.cfg.model_name == "ResNet50":
+            self.model = ResNet50(model_cfg, self.cfg.dataset_cfg.nrof_classes)
+
         self.model.to(self.cfg.device)
         # Определение функции потерь и оптимизатора
         self.criterion = nn.CrossEntropyLoss()

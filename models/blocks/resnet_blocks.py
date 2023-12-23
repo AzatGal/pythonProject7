@@ -14,7 +14,7 @@ class InputStem(nn.Module):
 
         self.conv = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=7, stride=2, padding=3)
         self.max_pool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
-        raise NotImplementedError
+        # raise NotImplementedError
 
     def forward(self, inputs):
         # TODO: реализуйте forward pass
