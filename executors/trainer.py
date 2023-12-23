@@ -120,8 +120,9 @@ class Trainer:
         with torch.no_grad():
             for batch_idx, batch in enumerate(self.test_dataloader):
                 loss, outputs = self.make_step(batch, update_model=False)
+                outputs = torch.argmax(outputs, dim=1).to(self.cfg.device)
+                batch['label'] = batch['label'].to(self.cfg.device)
                 total_loss += loss * len(batch['image'])
-                outputs = torch.argmax(outputs, dim=1)
                 total_correct += accuracy(outputs, batch["label"]) * len(batch['image'])
                 total_samples += len(batch['image'])
 
