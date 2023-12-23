@@ -81,7 +81,7 @@ class Trainer:
     def make_step(self, batch, update_model=True):
         images = batch['image'].to(self.cfg.device)
         labels = batch['label'].to(self.cfg.device)
-        print("images size:", images.size())
+
         # Forward pass
         outputs = self.model(images)
         loss = self.criterion(outputs, labels)
@@ -97,13 +97,15 @@ class Trainer:
     def train_epoch(self, *args, **kwargs):
         self.model.train()
         for batch_idx, batch in enumerate(self.train_dataloader):
+            """
             batch['image'].to(self.cfg.device)
             batch['label'].to(self.cfg.device)
-
+            """
+            labels = batch["label"].copy()
             loss, outputs = self.make_step(batch, update_model=True)
 
-            outputs = torch.argmax(outputs, dim=1).to(self.cfg.device)
-            acc = accuracy(outputs, batch["label"])
+            outputs = torch.argmax(outputs, dim=1)
+            acc = accuracy(outputs, labels)
             # Log loss and accuracy
             self.logger.save_param('train', 'loss', loss)  # ('Train Loss', loss, step=batch_idx)
             self.logger.save_param('train', 'accuracy', acc)
