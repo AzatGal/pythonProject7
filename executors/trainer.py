@@ -103,7 +103,7 @@ class Trainer:
             """
             loss, outputs = self.make_step(batch, update_model=True)
 
-            outputs = torch.argmax(outputs, dim=1)
+            outputs = torch.argmax(outputs, dim=1).to(self.cfg.device)
             batch['label'].to(self.cfg.device)
             acc = accuracy(outputs, batch['label'])
             # Log loss and accuracy
