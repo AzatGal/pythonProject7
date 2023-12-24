@@ -55,7 +55,7 @@ class Bottleneck(nn.Module):
 
         self.expansion = expansion
         self.down_sampling = down_sampling
-
+        """
         self.path_A = nn.Sequential(
             nn.Conv2d(in_channels, out_channels, kernel_size=(1, 1), stride=(stride, stride), padding=1),
             nn.BatchNorm2d(out_channels),
@@ -71,7 +71,8 @@ class Bottleneck(nn.Module):
         self.path_A.append(nn.Conv2d(in_channels, out_channels, kernel_size=(1, 1), stride=(stride, stride), padding=1))
         self.path_A.append(nn.BatchNorm2d(out_channels))
         self.path_A.append(nn.ReLU(inplace=True))
-        self.path_A.append(nn.Conv2d(out_channels, out_channels, kernel_size=(3, 3), padding=1))  # , stride=stride, padding=1),
+        self.path_A.append(
+            nn.Conv2d(out_channels, out_channels, kernel_size=(3, 3), padding=1))  # , stride=stride, padding=1),
         self.path_A.append(nn.BatchNorm2d(out_channels))
         self.path_A.append(nn.ReLU(inplace=True))
         self.path_A.append(nn.Conv2d(out_channels, out_channels * expansion, kernel_size=(1, 1)))
@@ -92,24 +93,23 @@ class Bottleneck(nn.Module):
             self.path_B.append(nn.BatchNorm2d(out_channels * expansion))
         else:
             self.path_B.append(nn.Identity())
-        """
 
     def forward(self, inputs):
         # TODO: реализуйте forward pass
         # raise NotImplementedError
-
+        """
         x = self.path_A(inputs)
         x += self.path_B(inputs)
         x = nn.ReLU(inplace=True)(x)
         """
-        x = inputs.clone().cuda()
-        y = inputs.clone().cuda()
-        for i in self.path_A:
-            x = i(x)
-        for i in self.path_B:
-            y = i(y)
-        outputs = nn.ReLU(inplace=True)(x + y)
-        """
+        x = self.path_A[0](inputs)
+        y = self.path_B[0](inputs)
+        for i in range(1, len(self.path_A)):
+            x = self.path_A[i](x)
+        for i in range(1, len(self.path_B)):
+            y = self.path_B[i](y)
+        x = nn.ReLU(inplace=True)(x + y)
+
         return x
 
 
@@ -128,10 +128,12 @@ class Stage(nn.Module):
         ])
 
         self.blocks.extend([
-            Bottleneck(in_channels=in_channels, out_channels=in_channels, stride=1, down_sampling=False) for _ in range(nrof_blocks - 2)
+            Bottleneck(in_channels=in_channels, out_channels=in_channels, stride=1, down_sampling=False) for _ in
+            range(nrof_blocks - 2)
         ])
 
-        self.blocks.append(Bottleneck(in_channels=in_channels, out_channels=out_channels, stride=1, down_sampling=False))
+        self.blocks.append(
+            Bottleneck(in_channels=in_channels, out_channels=out_channels, stride=1, down_sampling=False))
 
     def forward(self, inputs):
         # TODO: реализуйте forward pass
