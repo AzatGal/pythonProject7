@@ -103,7 +103,9 @@ class Bottleneck(nn.Module):
         print("inputs botl", inputs.size())
         x = self.path_A(inputs)
         print("path A x size", x.size())
-        x += self.path_B(inputs)
+        y = self.path_B(inputs)
+        print("path B x size", y.size())
+        x += y
         x = nn.ReLU(inplace=True)(x)
         """
         x = self.path_A[0](inputs)
