@@ -57,10 +57,10 @@ class Bottleneck(nn.Module):
         self.down_sampling = down_sampling
 
         self.path_A = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=1),
+            nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, padding=1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_channels, out_channels, kernel_size=3, stride=stride, padding=1),
+            nn.Conv2d(out_channels, out_channels, kernel_size=3),  # , stride=stride, padding=1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True),
             nn.Conv2d(out_channels, out_channels * expansion, kernel_size=1),
@@ -85,7 +85,7 @@ class Bottleneck(nn.Module):
 
 
 class Stage(nn.Module):
-    def __init__(self, nrof_blocks: int):
+    def __init__(self, nrof_blocks: int, in_channels: int, out_channels: int, stride):
         """
             Последовательность Bottleneck блоков, первый блок Down sampling, остальные - Residual
 
@@ -94,9 +94,15 @@ class Stage(nn.Module):
         """
         super().__init__()
         # raise NotImplementedError
-        self.blocks = nn.ModuleList([Bottleneck(in_channels=256, out_channels=64, stride=1, down_sampling=True)])
-        self.blocks.extend([Bottleneck(in_channels=256, out_channels=64, stride=1, down_sampling=False) for _ in
-                            range(nrof_blocks - 1)])
+        self.blocks = nn.ModuleList([
+            Bottleneck(in_channels=in_channels, out_channels=in_channels, stride=stride, down_sampling=True)
+        ])
+
+        self.blocks.extend([
+            Bottleneck(in_channels=in_channels, out_channels=in_channels, stride=1, down_sampling=False) for _ in range(nrof_blocks - 2)
+        ])
+
+        self.blocks.append(Bottleneck(in_channels=in_channels, out_channels=out_channels, stride=1, down_sampling=False))
 
     def forward(self, inputs):
         # TODO: реализуйте forward pass

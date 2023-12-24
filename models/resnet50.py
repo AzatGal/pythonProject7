@@ -14,10 +14,10 @@ class ResNet50(nn.Module):
         # TODO: инициализируйте слои модели, используя классы InputStem, Stage
         self.input_block = InputStem()
         self.stages = nn.Sequential(
-            Stage(nrof_blocks=3),
-            Stage(nrof_blocks=4),
-            Stage(nrof_blocks=6),
-            Stage(nrof_blocks=3)
+            Stage(nrof_blocks=3, in_channels=64, out_channels=256, stride=1),
+            Stage(nrof_blocks=4, in_channels=128, out_channels=512, stride=2),
+            Stage(nrof_blocks=6, in_channels=256, out_channels=1024, stride=2),
+            Stage(nrof_blocks=3, in_channels=512, out_channels=2048, stride=2)
         )
 
         self.avg_pool = nn.AdaptiveAvgPool2d(output_size=(1, 1))
