@@ -101,11 +101,11 @@ class Bottleneck(nn.Module):
     def forward(self, inputs):
         # TODO: реализуйте forward pass
         # raise NotImplementedError
-        print("inputs botl", inputs.size())
+        # print("inputs botl", inputs.size())
         x = self.path_A(inputs)
-        print("path A x size", x.size())
+        # print("path A x size", x.size())
         y = self.path_B(inputs)
-        print("path B x size", y.size())
+        # print("path B x size", y.size())
         x += y
         x = nn.ReLU(inplace=True)(x)
         """
@@ -147,6 +147,6 @@ class Stage(nn.Module):
         # raise NotImplementedError
         x = inputs
         for block in self.blocks:
-            print("size x", x.size())
+            # print("size x", x.size())
             x = block(x)
         return x
