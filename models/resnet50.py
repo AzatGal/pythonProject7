@@ -15,9 +15,9 @@ class ResNet50(nn.Module):
         self.input_block = InputStem()
         self.stages = nn.Sequential(
             Stage(nrof_blocks=3, in_channels=64, out_channels=64, stride=1),
-            Stage(nrof_blocks=4, in_channels=128, out_channels=128, stride=2),
-            Stage(nrof_blocks=6, in_channels=256, out_channels=256, stride=2),
-            Stage(nrof_blocks=3, in_channels=512, out_channels=512, stride=2)
+            Stage(nrof_blocks=4, in_channels=256, out_channels=128, stride=2),
+            Stage(nrof_blocks=6, in_channels=512, out_channels=256, stride=2),
+            Stage(nrof_blocks=3, in_channels=1024, out_channels=512, stride=2)
         )
 
         self.avg_pool = nn.AdaptiveAvgPool2d(output_size=(1, 1))
