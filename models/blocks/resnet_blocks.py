@@ -69,7 +69,7 @@ class Bottleneck(nn.Module):
 
         if self.down_sampling:
             self.path_B = nn.Sequential(
-                nn.Conv2d(in_channels, out_channels * expansion, kernel_size=(1, 1), stride=(stride, stride)),
+                nn.Conv2d(out_channels, out_channels * expansion, kernel_size=(1, 1), stride=(stride, stride)),
                 nn.BatchNorm2d(out_channels * expansion)
             )
         else:
