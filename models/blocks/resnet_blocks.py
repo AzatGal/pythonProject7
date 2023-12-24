@@ -56,6 +56,24 @@ class Bottleneck(nn.Module):
         self.expansion = expansion
         self.down_sampling = down_sampling
 
+        if self.down_sampling:
+            self.path_B = nn.Sequential(
+                nn.Conv2d(in_channels, out_channels * expansion, kernel_size=(1, 1), stride=(stride, stride), padding=1),
+                nn.BatchNorm2d(out_channels * expansion)
+            )
+            in_channels *= expansion
+        else:
+            self.path_B = nn.Identity()
+        """
+        self.path_B = []
+        if self.down_sampling:
+            self.path_B.append(nn.Conv2d(in_channels, out_channels * expansion, kernel_size=(1, 1),
+                                         stride=(stride, stride), padding=1))
+            self.path_B.append(nn.BatchNorm2d(out_channels * expansion))
+        else:
+            self.path_B.append(nn.Identity())
+        """
+
         self.path_A = nn.Sequential(
             nn.Conv2d(in_channels, out_channels, kernel_size=(1, 1), stride=(stride, stride), padding=1),
             nn.BatchNorm2d(out_channels),
@@ -77,22 +95,6 @@ class Bottleneck(nn.Module):
         self.path_A.append(nn.ReLU(inplace=True))
         self.path_A.append(nn.Conv2d(out_channels, out_channels * expansion, kernel_size=(1, 1)))
         self.path_A.append(nn.BatchNorm2d(out_channels * expansion))
-        """
-        if self.down_sampling:
-            self.path_B = nn.Sequential(
-                nn.Conv2d(in_channels, out_channels * expansion, kernel_size=(1, 1), stride=(stride, stride), padding=1),
-                nn.BatchNorm2d(out_channels * expansion)
-            )
-        else:
-            self.path_B = nn.Identity()
-        """
-        self.path_B = []
-        if self.down_sampling:
-            self.path_B.append(nn.Conv2d(in_channels, out_channels * expansion, kernel_size=(1, 1),
-                                         stride=(stride, stride), padding=1))
-            self.path_B.append(nn.BatchNorm2d(out_channels * expansion))
-        else:
-            self.path_B.append(nn.Identity())
         """
 
     def forward(self, inputs):
@@ -125,11 +127,11 @@ class Stage(nn.Module):
         super().__init__()
         # raise NotImplementedError
         self.blocks = nn.ModuleList([
-            Bottleneck(in_channels=in_channels, out_channels=in_channels, stride=stride, down_sampling=True)
+            Bottleneck(in_channels=in_channels, out_channels=out_channels, stride=stride, down_sampling=True)
         ])
 
         self.blocks.extend([
-            Bottleneck(in_channels=in_channels, out_channels=in_channels, stride=1, down_sampling=False) for _ in
+            Bottleneck(in_channels=in_channels, out_channels=out_channels, stride=1, down_sampling=False) for _ in
             range(nrof_blocks - 2)
         ])
 
