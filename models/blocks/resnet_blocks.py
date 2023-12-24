@@ -61,7 +61,8 @@ class Bottleneck(nn.Module):
                 nn.Conv2d(in_channels, out_channels * expansion, kernel_size=(1, 1), stride=(stride, stride)),  # , padding=1),
                 nn.BatchNorm2d(out_channels * expansion)
             )
-            in_channels /= stride
+            if stride == 1:
+                in_channels *= 2
         else:
             in_channels *= expansion
             self.path_B = nn.Identity()
