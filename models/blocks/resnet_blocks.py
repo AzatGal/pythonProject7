@@ -12,7 +12,7 @@ class InputStem(nn.Module):
         """
         super().__init__()
 
-        self.conv = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=7, stride=2, padding=3)
+        self.conv = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=(7, 7), stride=(2, 2), padding=3)
         self.max_pool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
         # raise NotImplementedError
 
@@ -57,19 +57,19 @@ class Bottleneck(nn.Module):
         self.down_sampling = down_sampling
 
         self.path_A = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=stride, padding=1),
+            nn.Conv2d(in_channels, out_channels, kernel_size=(1, 1), stride=(stride, stride), padding=1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_channels, out_channels, kernel_size=3),  # , stride=stride, padding=1),
+            nn.Conv2d(out_channels, out_channels, kernel_size=(3, 3)),  # , stride=stride, padding=1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_channels, out_channels * expansion, kernel_size=1),
+            nn.Conv2d(out_channels, out_channels * expansion, kernel_size=(1, 1)),
             nn.BatchNorm2d(out_channels * expansion)
         )
 
         if self.down_sampling:
             self.path_B = nn.Sequential(
-                nn.Conv2d(in_channels, out_channels * expansion, kernel_size=1, stride=stride),
+                nn.Conv2d(in_channels, out_channels * expansion, kernel_size=(1, 1), stride=(stride, stride)),
                 nn.BatchNorm2d(out_channels * expansion)
             )
         else:
