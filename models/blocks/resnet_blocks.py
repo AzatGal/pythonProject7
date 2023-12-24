@@ -75,13 +75,13 @@ class Bottleneck(nn.Module):
         """
 
         self.path_A = nn.Sequential(
-            nn.Conv2d(in_channels, out_channels, kernel_size=(1, 1), stride=(stride, stride)),  # , padding=1),
+            nn.Conv2d(in_channels, out_channels, kernel_size=(1, 1), stride=(stride, stride), padding=1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_channels, out_channels, kernel_size=(3, 3)),  # , padding=1),  # , stride=stride, padding=1),
+            nn.Conv2d(out_channels, out_channels, kernel_size=(3, 3), padding=1),  # , stride=stride, padding=1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_channels, out_channels * expansion, kernel_size=(1, 1)),
+            nn.Conv2d(out_channels, out_channels * expansion, kernel_size=(1, 1), padding=1),
             nn.BatchNorm2d(out_channels * expansion)
         )
         """
