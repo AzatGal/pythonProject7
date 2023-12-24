@@ -103,8 +103,8 @@ class Bottleneck(nn.Module):
         x += self.path_B(inputs)
         x = nn.ReLU(inplace=True)(x)
         """
-        x = inputs.clone()
-        y = inputs.clone()
+        x = inputs.clone().cuda()
+        y = inputs.clone().cuda()
         for i in self.path_A:
             x = i(x)
         for i in self.path_B:
