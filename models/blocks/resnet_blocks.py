@@ -56,7 +56,6 @@ class Bottleneck(nn.Module):
         self.expansion = expansion
         self.down_sampling = down_sampling
 
-        """
         self.path_A = nn.Sequential(
             nn.Conv2d(in_channels, out_channels, kernel_size=(1, 1), stride=(stride, stride), padding=1),
             nn.BatchNorm2d(out_channels),
@@ -77,7 +76,6 @@ class Bottleneck(nn.Module):
         self.path_A.append(nn.ReLU(inplace=True))
         self.path_A.append(nn.Conv2d(out_channels, out_channels * expansion, kernel_size=(1, 1)))
         self.path_A.append(nn.BatchNorm2d(out_channels * expansion))
-
         """
         if self.down_sampling:
             self.path_B = nn.Sequential(
@@ -94,11 +92,12 @@ class Bottleneck(nn.Module):
             self.path_B.append(nn.BatchNorm2d(out_channels * expansion))
         else:
             self.path_B.append(nn.Identity())
+        """
 
     def forward(self, inputs):
         # TODO: реализуйте forward pass
         # raise NotImplementedError
-        """
+
         x = self.path_A(inputs)
         x += self.path_B(inputs)
         x = nn.ReLU(inplace=True)(x)
@@ -110,7 +109,8 @@ class Bottleneck(nn.Module):
         for i in self.path_B:
             y = i(y)
         outputs = nn.ReLU(inplace=True)(x + y)
-        return outputs
+        """
+        return x
 
 
 class Stage(nn.Module):
