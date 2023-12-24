@@ -62,7 +62,7 @@ class Bottleneck(nn.Module):
                 nn.BatchNorm2d(out_channels * expansion)
             )
         else:
-            # in_channels *= expansion
+            in_channels *= expansion
             self.path_B = nn.Identity()
         """
         self.path_B = []
