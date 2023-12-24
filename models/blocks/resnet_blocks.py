@@ -56,9 +56,8 @@ class Bottleneck(nn.Module):
         self.expansion = expansion
         self.down_sampling = down_sampling
 
-        in_channels *= stride
-
         if self.down_sampling:
+            in_channels *= stride
             self.path_B = nn.Sequential(
                 nn.Conv2d(in_channels, out_channels * expansion, kernel_size=(1, 1), stride=(stride, stride)),  # , padding=1),
                 nn.BatchNorm2d(out_channels * expansion)
