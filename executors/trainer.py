@@ -18,7 +18,8 @@ from pythonProject7.datasets.oxford_pet_dataset import OxfordIIITPet
 from pythonProject7.datasets.utils.prepare_transforms import prepare_transforms
 from pythonProject7.logs.Logger import Logger
 from pythonProject7.models.vgg16 import VGG16
-from pythonProject7.models.resnet50 import ResNet50, ResNetB
+from pythonProject7.models.resnet50 import ResNet50
+from pythonProject7.models.resnetB import ResNetB
 from pythonProject7.utils.metrics import accuracy, balanced_accuracy
 from pythonProject7.utils.visualization import show_batch
 from pythonProject7.utils.utils import set_seed
