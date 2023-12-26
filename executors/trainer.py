@@ -20,9 +20,11 @@ from pythonProject7.logs.Logger import Logger
 from pythonProject7.models.vgg16 import VGG16
 from pythonProject7.models.resnet50 import ResNet50
 from pythonProject7.models.resnetB import ResNetB
+from pythonProject7.models.resnetC import ResNetC
 from pythonProject7.utils.metrics import accuracy, balanced_accuracy
 from pythonProject7.utils.visualization import show_batch
 from pythonProject7.utils.utils import set_seed
+
 
 
 class Trainer:
@@ -70,6 +72,8 @@ class Trainer:
             self.model = ResNet50(model_cfg, self.cfg.dataset_cfg.nrof_classes)
         if self.cfg.model_name == "ResNetB":
             self.model = ResNetB(model_cfg, self.cfg.dataset_cfg.nrof_classes)
+        if self.cfg.model_name == "ResNetC":
+            self.model = ResNetC(model_cfg, self.cfg.dataset_cfg.nrof_classes)
 
         self.model.to(self.cfg.device)
         # Определение функции потерь и оптимизатора

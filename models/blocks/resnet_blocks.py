@@ -24,6 +24,31 @@ class InputStem(nn.Module):
         return x
 
 
+class InputStemC(nn.Module):
+    def __init__(self):
+        """
+            Входной блок нейронной сети ResNet, содержит свертку 7x7 c количеством фильтров 64 и шагом 2, затем
+            следует max-pooling 3x3 с шагом 2.
+
+            TODO: инициализируйте слои входного блока
+        """
+        super().__init__()
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(3, 3), stride=(2, 2), padding=3)
+        self.conv2 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=(3, 3), padding=1)
+        self.conv3 = nn.Conv2d(in_channels=32, out_channels=62, kernel_size=(3, 3), padding=1)
+        self.max_pool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
+        # raise NotImplementedError
+
+    def forward(self, inputs):
+        # TODO: реализуйте forward pass
+        # raise NotImplementedError
+        x = self.conv1(inputs)
+        x = self.conv2(x)
+        x = self.conv3(x)
+        x = self.max_pool(x)
+        return x
+
+
 class Bottleneck(nn.Module):
     def __init__(self, in_channels, out_channels, expansion=4, stride=1, down_sampling=False):
         """
@@ -178,9 +203,9 @@ class BottleneckB(nn.Module):
         # raise NotImplementedError
 
         x = self.path_A(inputs)
-        print("A size", x.size())
+        # print("A size", x.size())
         y = self.path_B(inputs)
-        print("B size", y.size())
+        # print("B size", y.size())
         x += y
         x = nn.ReLU(inplace=True)(x)
 
@@ -246,6 +271,6 @@ class StageB(nn.Module):
         # raise NotImplementedError
         x = inputs
         for block in self.blocks:
-            print("size x", x.size())
+            # print("size x", x.size())
             x = block(x)
         return x
