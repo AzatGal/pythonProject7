@@ -70,7 +70,9 @@ class ResNetC(nn.Module):
 
            TODO: реализуйте forward pass
        """
+        print("size inputs", inputs.size())
         x = self.input_block(inputs)
+        print("size x", x.size())
         x = self.stages(x)
         x = self.avg_pool(x)
         x = x.view(x.size(0), -1)
