@@ -169,7 +169,7 @@ class BottleneckB(nn.Module):
             nn.Conv2d(out_channels, out_channels, kernel_size=(3, 3), stride=(stride, stride)),  # , padding=1),  # , stride=stride, padding=1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_channels, out_channels * expansion, kernel_size=(1, 1), padding=(stride % 2) + 1),
+            nn.Conv2d(out_channels, out_channels * expansion, kernel_size=(1, 1)),
             nn.BatchNorm2d(out_channels * expansion)
         )
 
