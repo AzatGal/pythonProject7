@@ -1,23 +1,23 @@
 import torch
 import torch.nn as nn
-from models.blocks.resnet_blocks import InputStemC, Stage
+from models.blocks.resnet_blocks import InputStem, StageD
 
 
-class ResNetC(nn.Module):
+class ResNetD(nn.Module):
     def __init__(self, cfg, nrof_classes):
         """ https://arxiv.org/pdf/1512.03385.pdf """
-        super(ResNetC, self).__init__()
+        super(ResNetD, self).__init__()
 
         self.cfg = cfg
         self.nrof_classes = nrof_classes
 
         # TODO: инициализируйте слои модели, используя классы InputStem, Stage
-        self.input_block = InputStemC()
+        self.input_block = InputStem()
         self.stages = nn.Sequential(
-            Stage(nrof_blocks=3, in_channels=64, out_channels=64, stride=1),
-            Stage(nrof_blocks=4, in_channels=128, out_channels=128, stride=2),
-            Stage(nrof_blocks=6, in_channels=256, out_channels=256, stride=2),
-            Stage(nrof_blocks=3, in_channels=512, out_channels=512, stride=2)
+            StageD(nrof_blocks=3, in_channels=64, out_channels=64, stride=1),
+            StageD(nrof_blocks=4, in_channels=128, out_channels=128, stride=2),
+            StageD(nrof_blocks=6, in_channels=256, out_channels=256, stride=2),
+            StageD(nrof_blocks=3, in_channels=512, out_channels=512, stride=2)
         )
 
         self.avg_pool = nn.AdaptiveAvgPool2d(output_size=(1, 1))
@@ -70,9 +70,7 @@ class ResNetC(nn.Module):
 
            TODO: реализуйте forward pass
        """
-        # print("size inputs", inputs.size())
         x = self.input_block(inputs)
-        # print("size x", x.size())
         x = self.stages(x)
         x = self.avg_pool(x)
         x = x.view(x.size(0), -1)

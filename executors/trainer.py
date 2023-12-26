@@ -74,6 +74,8 @@ class Trainer:
             self.model = ResNetB(model_cfg, self.cfg.dataset_cfg.nrof_classes)
         if self.cfg.model_name == "ResNetC":
             self.model = ResNetC(model_cfg, self.cfg.dataset_cfg.nrof_classes)
+        if self.cfg.model_name == "ResNetD":
+            self.model = ResNetD(model_cfg, self.cfg.dataset_cfg.nrof_classes)
 
         self.model.to(self.cfg.device)
         # Определение функции потерь и оптимизатора
