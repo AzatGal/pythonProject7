@@ -30,4 +30,4 @@ def show_batch(batch_images, nrow=8, inv_normalize=True):
     grid = torchvision.utils.make_grid(batch_images, nrow=nrow)
     show(grid)
     plt.show()
-    # return plt.gcf()
+    return plt.gcf()

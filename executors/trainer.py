@@ -7,7 +7,7 @@
 #  6. Добавить возможность обучать на gpu
 #  За основу данного класса можно взять https://github.com/pkhanzhina/mllib_f2023_mlp/blob/master/executors/mlp_trainer.py
 
-
+import gc
 import os
 import torch
 import torch.nn as nn
@@ -18,7 +18,7 @@ from pythonProject7.datasets.oxford_pet_dataset import OxfordIIITPet
 from pythonProject7.datasets.utils.prepare_transforms import prepare_transforms
 from pythonProject7.logs.Logger import Logger
 from pythonProject7.models.vgg16 import VGG16
-from pythonProject7.models.resnet50 import ResNet50
+from pythonProject7.models.resnet50 import ResNet50, ResNetB
 from pythonProject7.utils.metrics import accuracy, balanced_accuracy
 from pythonProject7.utils.visualization import show_batch
 from pythonProject7.utils.utils import set_seed
@@ -67,6 +67,8 @@ class Trainer:
             self.model = VGG16(model_cfg, self.cfg.dataset_cfg.nrof_classes)
         if self.cfg.model_name == "ResNet50":
             self.model = ResNet50(model_cfg, self.cfg.dataset_cfg.nrof_classes)
+        if self.cfg.model_name == "ResNetB":
+            self.model = ResNetB(model_cfg, self.cfg.dataset_cfg.nrof_classes)
 
         self.model.to(self.cfg.device)
         # Определение функции потерь и оптимизатора
@@ -124,11 +126,16 @@ class Trainer:
         with torch.no_grad():
             for batch_idx, batch in enumerate(self.test_dataloader):
                 loss, outputs = self.make_step(batch, update_model=False)
+                show_batch(batch["image"])
                 outputs = torch.argmax(outputs, dim=1).to(self.cfg.device)
                 batch['label'] = batch['label'].to(self.cfg.device)
                 total_loss += loss * len(batch['image'])
                 total_correct += accuracy(outputs, batch["label"]) * len(batch['image'])
                 total_samples += len(batch['image'])
+                del batch
+                del outputs
+                gc.collect()  # import gc
+                torch.cuda.empty_cache()
 
         avg_loss = total_loss / total_samples
         avg_accuracy = total_correct / total_samples
