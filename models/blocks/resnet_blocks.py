@@ -178,9 +178,9 @@ class BottleneckB(nn.Module):
         # raise NotImplementedError
 
         x = self.path_A(inputs)
-
+        print("A size", x.size())
         y = self.path_B(inputs)
-
+        print("B size", y.size())
         x += y
         x = nn.ReLU(inplace=True)(x)
 
