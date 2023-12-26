@@ -181,7 +181,7 @@ class BottleneckD(nn.Module):
             in_channels *= stride
             self.path_B = nn.Sequential(
                 nn.AvgPool2d(kernel_size=(2, 2), stride=stride),
-                nn.Conv2d(in_channels, out_channels * expansion, kernel_size=(1, 1), stride=(1, 1), padding=1),
+                nn.Conv2d(in_channels, out_channels * expansion, kernel_size=(1, 1), stride=(1, 1)),
                 nn.BatchNorm2d(out_channels * expansion)
             )
         else:
