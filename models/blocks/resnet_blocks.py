@@ -33,7 +33,7 @@ class InputStemC(nn.Module):
             TODO: инициализируйте слои входного блока
         """
         super().__init__()
-        self.conv1 = nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(3, 3), stride=(2, 2), padding=3)
+        self.conv1 = nn.Conv2d(in_channels=3, out_channels=32, kernel_size=(3, 3), stride=(2, 2), padding=1)
         self.conv2 = nn.Conv2d(in_channels=32, out_channels=32, kernel_size=(3, 3), padding=1)
         self.conv3 = nn.Conv2d(in_channels=32, out_channels=62, kernel_size=(3, 3), padding=1)
         self.max_pool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
