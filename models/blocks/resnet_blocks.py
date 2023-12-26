@@ -169,7 +169,7 @@ class BottleneckB(nn.Module):
             nn.Conv2d(out_channels, out_channels, kernel_size=(3, 3), stride=(stride, stride)),  # , padding=1),  # , stride=stride, padding=1),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_channels, out_channels * expansion, kernel_size=(1, 1)),  # , padding=1),
+            nn.Conv2d(out_channels, out_channels * expansion, kernel_size=(1, 1), padding=1),
             nn.BatchNorm2d(out_channels * expansion)
         )
 
@@ -246,6 +246,6 @@ class StageB(nn.Module):
         # raise NotImplementedError
         x = inputs
         for block in self.blocks:
-            # print("size x", x.size())
+            print("size x", x.size())
             x = block(x)
         return x
