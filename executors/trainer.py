@@ -173,6 +173,11 @@ class Trainer:
             self.logger.save_param('train', 'balanced accuracy', b_acc)
             self.logger.save_param('train', 'learning rate', self.optimizer.param_groups[0]['lr'])
 
+            del batch
+            del outputs
+            gc.collect()  # import gc
+            torch.cuda.empty_cache()
+
         if self.cfg.model_name in ("ResNetB", "ResNetC", "ResNetD"):
             self.scheduler_wu.step()
             self.scheduler_cd.step()
