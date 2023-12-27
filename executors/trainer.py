@@ -170,6 +170,7 @@ class Trainer:
             self.logger.save_param('train', 'loss', loss)  # ('Train Loss', loss, step=batch_idx)
             self.logger.save_param('train', 'accuracy', acc)
             self.logger.save_param('train', 'balanced accuracy', b_acc)
+            print(self.optimizer.param_groups[0]['lr'])
             self.logger.save_param('train', 'learning rate', self.optimizer.param_groups[0]['lr'])
         if self.cfg.model_name in ("ResNetB", "ResNetC", "ResNetD"):
             self.scheduler_wu.step()
