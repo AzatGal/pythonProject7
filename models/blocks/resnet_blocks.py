@@ -202,11 +202,11 @@ class BottleneckD(nn.Module):
     def forward(self, inputs):
         # TODO: реализуйте forward pass
         # raise NotImplementedError
-        print("inputs size", inputs.size())
+        # print("inputs size", inputs.size())
         x = self.path_A(inputs)
-        print("x size", x.size())
+        # print("x size", x.size())
         y = self.path_B(inputs)
-        print("y size", y.size())
+        # print("y size", y.size())
         x += y
         x = nn.ReLU(inplace=True)(x)
         return x
