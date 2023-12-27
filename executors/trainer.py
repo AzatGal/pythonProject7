@@ -116,7 +116,7 @@ class Trainer:
             self.optimizer,
             lr_lambda=lambda epoch: epoch * self.cfg.lr / 10 if epoch < 5 else self.cfg.lr
         )
-        self.scheduler_cd = CosineAnnealingLR(self.optimizer, T_max=self.cfg.num_epoch)
+        self.scheduler_cd = CosineAnnealingLR(self.optimizer, T_max=self.cfg.num_epochs)
 
     def save_model(self, filename):
         save_path = os.path.join(self.cfg.exp_dir, f"{filename}.pt")
