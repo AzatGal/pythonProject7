@@ -118,11 +118,12 @@ class Trainer:
                 lr=self.cfg.lr
             )
 
-        self.scheduler_wu = LambdaLR(
-            self.optimizer,
-            lr_lambda=lambda epoch: (epoch + 1) * self.cfg.lr / 10 if epoch < 5 else self.cfg.lr
-        )
-        self.scheduler_cd = CosineAnnealingLR(self.optimizer, T_max=self.cfg.num_epochs)
+        if self.cfg.model_name in ("ResNetB", "ResNetC", "ResNetD"):
+            self.scheduler_wu = LambdaLR(
+                self.optimizer,
+                lr_lambda=lambda epoch: (epoch + 1) * self.cfg.lr / 10 if epoch < 5 else self.cfg.lr
+            )
+            self.scheduler_cd = CosineAnnealingLR(self.optimizer, T_max=self.cfg.num_epochs)
 
     def save_model(self, filename):
         save_path = os.path.join(self.cfg.exp_dir, f"{filename}.pt")
