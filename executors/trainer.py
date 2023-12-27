@@ -165,8 +165,6 @@ class Trainer:
                 p[batch["label"][i]] += 1
                 if batch["label"][i] == outputs[i]:
                     op[outputs[i]] += 1
-            print(op)
-            print(p)
             b_acc = balanced_accuracy(op, p)
 
             self.logger.save_param('train', 'loss', loss)  # ('Train Loss', loss, step=batch_idx)
@@ -201,8 +199,6 @@ class Trainer:
                     p[batch["label"][i]] += 1
                     if batch["label"][i] == outputs[i]:
                         op[outputs[i]] += 1
-                print(op)
-                print(p)
                 total_b_acc += balanced_accuracy(op, p) * len(batch['image'])
 
                 del batch

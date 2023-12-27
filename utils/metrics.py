@@ -12,7 +12,7 @@ def accuracy(predicted_class, ground_truth, *args, **kwargs):
     return acc
 
 
-def balanced_accuracy(TP_i, N_i, N=37, *args, **kwargs):
+def balanced_accuracy(tp, n, N=37, *args, **kwargs):
     """
         Вычисление точности:
             balanced accuracy = sum( TP_i / N_i ) / N, где
@@ -22,7 +22,9 @@ def balanced_accuracy(TP_i, N_i, N=37, *args, **kwargs):
         TODO: реализуйте подсчет balanced accuracy
     """
     # raise NotImplementedError
-    TP_i = np.array(TP_i)
-    N_i = np.array(N_i)
-    balanced_acc = np.sum(TP_i / N_i) / N
-    return balanced_acc
+    balanced_acc = 0
+    for i in range(len(n)):
+        if n[i] != 0:
+            balanced_acc += tp[i] / n[i]
+    # balanced_acc = np.sum(TP_i / N_i) / N
+    return balanced_acc / N
