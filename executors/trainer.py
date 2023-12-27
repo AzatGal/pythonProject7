@@ -64,6 +64,8 @@ class Trainer:
             "number epoch": self.cfg.num_epochs,
             "model name": self.cfg.model_name
         }
+        if self.cfg.model_name == "VGG16":
+            _params['momentum'] = self.cfg.momentum
         """
         for i in range(len(self.cfg.model_cfg.layers)):
             _params[self.cfg.model_cfg.layers[i][0] + f' {i + 1}'] = self.cfg.model_cfg.layers[i][1]
