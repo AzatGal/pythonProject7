@@ -55,7 +55,7 @@ class ResNet50(nn.Module):
         """
         wo_decay, w_decay = [], []
         for name, param in self.named_parameters():
-            if 'conv' in name or 'linear' in name:
+            if 'weight' in name and ('conv' in name or 'linear' in name):
                 w_decay.append(param)
             else:
                 wo_decay.append(param)

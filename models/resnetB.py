@@ -42,7 +42,7 @@ class ResNetB(nn.Module):
             if m.bias is not None:
                 nn.init.zeros_(m.bias)
         elif isinstance(m, nn.BatchNorm2d):
-            nn.init.ones_(m.weight)
+            nn.init.zeros_(m.weight)
             nn.init.zeros_(m.bias)
 
     def weight_decay_params(self):
@@ -55,7 +55,7 @@ class ResNetB(nn.Module):
         """
         wo_decay, w_decay = [], []
         for name, param in self.named_parameters():
-            if 'conv' in name or 'linear' in name:
+            if 'weight' in name and ('conv' in name or 'linear' in name):
                 w_decay.append(param)
             else:
                 wo_decay.append(param)

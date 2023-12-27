@@ -25,7 +25,20 @@ from pythonProject7.models.resnetD import ResNetD
 from pythonProject7.utils.metrics import accuracy, balanced_accuracy
 from pythonProject7.utils.visualization import show_batch
 from pythonProject7.utils.utils import set_seed
+from torch.optim.lr_scheduler import CosineAnnealingLR, LambdaLR
 
+
+class LabelSmoothingLoss(nn.Module):
+    def __init__(self, smoothing=0.1):
+        super(LabelSmoothingLoss, self).__init__()
+        self.smoothing = smoothing
+
+    def forward(self, outputs, targets):
+        num_classes = outputs.size(1)
+        smoothed_targets = torch.full_like(outputs, self.smoothing / (num_classes - 1))
+        smoothed_targets.scatter_(1, targets.unsqueeze(1), 1 - self.smoothing)
+        loss = nn.KLDivLoss()(torch.log_softmax(outputs, dim=1), smoothed_targets)
+        return loss
 
 
 class Trainer:
@@ -33,6 +46,8 @@ class Trainer:
         set_seed(cfg.seed)
 
         self.cfg = cfg
+        if self.cfg.model_name in ("ResNetB", "ResNetC", "ResNetD"):
+            self.cfg.lr = 0.1 * (self.cfg.batch_size / 256)
 
         self.cfg.device = torch.device("cuda" if (self.cfg.device == "cuda" and
                                                   torch.cuda.is_available()) else "cpu")
@@ -80,9 +95,26 @@ class Trainer:
 
         self.model.to(self.cfg.device)
         # Определение функции потерь и оптимизатора
-        self.criterion = nn.CrossEntropyLoss()
+        if self.cfg.model_name in ("ResNetB", "ResNetC", "ResNetD"):
+            self.criterion = LabelSmoothingLoss()
+        else:
+            self.criterion = nn.CrossEntropyLoss()
+
         optim_class = getattr(torch.optim, self.cfg.optimizer_name)
-        self.optimizer = optim_class(self.model.parameters(), lr=self.cfg.lr)
+
+        if self.cfg.model_name == "VGG16":
+            self.optimizer = optim_class(self.model.parameters(), lr=self.cfg.lr, momentum=self.cfg.momentum)
+        else:
+            self.optimizer = optim_class([
+                {'params': self.model.weight_decay_params()[0], 'weight_decay': 0},
+                {'params': self.model.weight_decay_params()[1]}],
+                lr=self.cfg.lr)
+
+        self.scheduler_wu = LambdaLR(
+            self.optimizer,
+            lr_lambda=lambda epoch: epoch * self.cfg.lr / 10 if epoch < 5 else self.cfg.lr
+        )
+        self.scheduler_cd = CosineAnnealingLR(self.optimizer, T_max=self.cfg.num_epoch)
 
     def save_model(self, filename):
         save_path = os.path.join(self.cfg.exp_dir, f"{filename}.pt")
@@ -123,6 +155,9 @@ class Trainer:
             # Log loss and accuracy
             self.logger.save_param('train', 'loss', loss)  # ('Train Loss', loss, step=batch_idx)
             self.logger.save_param('train', 'accuracy', acc)
+        if self.cfg.model_name in ("ResNetB", "ResNetC", "ResNetD"):
+            self.scheduler_wu.step()
+            self.scheduler_cd.step()
 
     def evaluate(self, *args, **kwargs):
         self.model.eval()
