@@ -66,12 +66,7 @@ class Trainer:
         }
         if self.cfg.model_name == "VGG16":
             _params['momentum'] = self.cfg.momentum
-        """
-        for i in range(len(self.cfg.model_cfg.layers)):
-            _params[self.cfg.model_cfg.layers[i][0] + f' {i + 1}'] = self.cfg.model_cfg.layers[i][1]
-            if self.cfg.model_cfg.layers[i][1] == {}:
-                _params[f'activation function {i + 1}'] = self.cfg.model_cfg.layers[i][0]
-        """
+
         self.logger.log_hyperparameters(params=_params)
 
     def __prepare_data(self, dataset_cfg):
@@ -156,18 +151,25 @@ class Trainer:
     def train_epoch(self, *args, **kwargs):
         self.model.train()
         for batch_idx, batch in enumerate(self.train_dataloader):
-            """
-            batch['image'].to(self.cfg.device)
-            batch['label'].to(self.cfg.device)
-            """
+
             loss, outputs = self.make_step(batch, update_model=True)
 
             outputs = torch.argmax(outputs, dim=1).to(self.cfg.device)
             batch['label'] = batch['label'].to(self.cfg.device)
+
             acc = accuracy(outputs, batch['label'])
-            # Log loss and accuracy
+
+            op = [0] * 37
+            p = [0] * 37
+            for i in range(len(outputs)):
+                p[batch["label"][i]] += 1
+                if batch["label"][i] == outputs[i]:
+                    op[outputs[i]] += 1
+            b_acc = balanced_accuracy(op, p)
+
             self.logger.save_param('train', 'loss', loss)  # ('Train Loss', loss, step=batch_idx)
             self.logger.save_param('train', 'accuracy', acc)
+            self.logger.save_param('train', 'balanced accuracy', b_acc)
         if self.cfg.model_name in ("ResNetB", "ResNetC", "ResNetD"):
             self.scheduler_wu.step()
             self.scheduler_cd.step()
@@ -178,6 +180,7 @@ class Trainer:
         total_loss = 0
         total_correct = 0
         total_samples = 0
+        total_b_acc = 0
 
         with torch.no_grad():
             for batch_idx, batch in enumerate(self.test_dataloader):
@@ -185,18 +188,30 @@ class Trainer:
                 show_batch(batch["image"])
                 outputs = torch.argmax(outputs, dim=1).to(self.cfg.device)
                 batch['label'] = batch['label'].to(self.cfg.device)
+
                 total_loss += loss * len(batch['image'])
                 total_correct += accuracy(outputs, batch["label"]) * len(batch['image'])
                 total_samples += len(batch['image'])
+
+                op = [0] * 37
+                p = [0] * 37
+                for i in range(len(outputs)):
+                    p[batch["label"][i]] += 1
+                    if batch["label"][i] == outputs[i]:
+                        op[outputs[i]] += 1
+                total_b_acc += balanced_accuracy(op, p) * len(batch['image'])
+
                 del batch
                 del outputs
                 gc.collect()  # import gc
                 torch.cuda.empty_cache()
 
+        avg_ba = total_b_acc / total_samples
         avg_loss = total_loss / total_samples
         avg_accuracy = total_correct / total_samples
         self.logger.save_param('test', 'loss', avg_loss)
         self.logger.save_param('test', 'accuracy', avg_accuracy)
+        self.logger.save_param('test', 'balanced accuracy', avg_ba)
 
     def fit(self, *args, **kwargs):
         for epoch in range(self.cfg.num_epochs):  # self.cfg.num_epochs):
