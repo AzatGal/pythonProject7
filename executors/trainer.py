@@ -105,12 +105,23 @@ class Trainer:
         optim_class = getattr(torch.optim, self.cfg.optimizer_name)
 
         if self.cfg.model_name == "VGG16":
-            self.optimizer = optim_class(self.model.parameters(), lr=self.cfg.lr, momentum=self.cfg.momentum)
+            if self.cfg.optimizer_name == "SGD":
+                self.optimizer = optim_class(
+                    self.model.parameters(),
+                    lr=self.cfg.lr,
+                    momentum=self.cfg.momentum,
+                    weight_decay=self.cfg.weight_decay
+                )
+            else:
+                self.optimizer = optim_class(self.model.parameters(), lr=self.cfg.lr)
         else:
-            self.optimizer = optim_class([
-                {'params': self.model.weight_decay_params()[0], 'weight_decay': 0},
-                {'params': self.model.weight_decay_params()[1]}],
-                lr=self.cfg.lr)
+            self.optimizer = optim_class(
+                [
+                    {'params': self.model.weight_decay_params()[0], 'weight_decay': 0},
+                    {'params': self.model.weight_decay_params()[1]}
+                ],
+                lr=self.cfg.lr
+            )
 
         self.scheduler_wu = LambdaLR(
             self.optimizer,
