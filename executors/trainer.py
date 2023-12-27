@@ -56,7 +56,7 @@ class Trainer:
         self.__prepare_model(self.cfg.model_cfg)
 
         self.logger = Logger(env_path="/Users/azatgalautdinov/Desktop/ML_Homework2/Perceptron/api_token.env",
-                             project='azat.galyautdinov161002/ML-Homework1')
+                             project='azat.galyautdinov161002/ML-Homework1', experiment_name=self.cfg.experiment_name)
         _params = {
             "batch_size": self.cfg.batch_size,
             "learning rate": self.cfg.lr,
@@ -170,6 +170,7 @@ class Trainer:
             self.logger.save_param('train', 'loss', loss)  # ('Train Loss', loss, step=batch_idx)
             self.logger.save_param('train', 'accuracy', acc)
             self.logger.save_param('train', 'balanced accuracy', b_acc)
+            self.logger.save_param('train', 'learning rate', self.optimizer.param_groups[0]['lr'])
         if self.cfg.model_name in ("ResNetB", "ResNetC", "ResNetD"):
             self.scheduler_wu.step()
             self.scheduler_cd.step()

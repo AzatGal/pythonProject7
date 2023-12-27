@@ -40,6 +40,8 @@ ROOT_DIR = '/kaggle/working/'
 train_cfg = EasyDict()
 train_cfg.seed = 0
 
+train_cfg.experiment_name = ""
+
 train_cfg.batch_size = 64
 train_cfg.lr = 1e-3
 
