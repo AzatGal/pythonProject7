@@ -159,12 +159,14 @@ class Trainer:
 
             acc = accuracy(outputs, batch['label'])
 
-            op = [0] * 37
-            p = [0] * 37
+            op = [0] * self.cfg.dataset_cfg.nrof_classes
+            p = [0] * self.cfg.dataset_cfg.nrof_classes
             for i in range(len(outputs)):
                 p[batch["label"][i]] += 1
                 if batch["label"][i] == outputs[i]:
                     op[outputs[i]] += 1
+            print(op)
+            print(p)
             b_acc = balanced_accuracy(op, p)
 
             self.logger.save_param('train', 'loss', loss)  # ('Train Loss', loss, step=batch_idx)
@@ -193,12 +195,14 @@ class Trainer:
                 total_correct += accuracy(outputs, batch["label"]) * len(batch['image'])
                 total_samples += len(batch['image'])
 
-                op = [0] * 37
-                p = [0] * 37
+                op = [0] * self.cfg.dataset_cfg.nrof_classes
+                p = [0] * self.cfg.dataset_cfg.nrof_classes
                 for i in range(len(outputs)):
                     p[batch["label"][i]] += 1
                     if batch["label"][i] == outputs[i]:
                         op[outputs[i]] += 1
+                print(op)
+                print(p)
                 total_b_acc += balanced_accuracy(op, p) * len(batch['image'])
 
                 del batch
